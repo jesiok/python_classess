@@ -37,10 +37,11 @@ def utils_random_percent(percent = ''):
     
 ######################################################################## 
 def utils_get_current_time():
-    # do poprawy
-    t_current_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
-    return t_current_time
-    
+    # from datetime import datetime
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+    current_date = now.strftime("%d/%m/%Y")
+    return current_date, current_time
 
 ########################################################################
 ## WEB

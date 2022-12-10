@@ -1,29 +1,36 @@
-# config
-# BROWSER
-BROWSER_BRAVE = 'BRAVE'
-BROWSER_DECENTR = 'DECENTR'
-BROWSER = BROWSER_BRAVE
+########### config ############
+########### BROWSER ############
+# 'BRAVE'
+# 'DECENTR'
+BROWSER = "BRAVE"
 
-# BINARY PATH
-BINARY_PATH_BRAVE = '/usr/bin/brave-browser'
-BINARY_PATH_DECENTR = '/usr/bin/decentr-browser-stable'  
-BINARY_PATH = BINARY_PATH_BRAVE
+############ BINARY PATH ############
+# windows brave app = '/usr/bin/brave-browser'
+# windows decentr app = '/usr/bin/decentr-browser-stable'  
+# windows chrome app "C:\Program Files\Google\Chrome\Application\chrome.exe"
+BINARY_PATH = "C:\Program Files\Google\Chrome\Application\chrome.exe"
 
 
-# DRIVER PATH
-#driver = webdriver.Chrome('./chromedriver')
+############ DRIVER PATH ############
+# skad sciagnac
+# driver = webdriver.Chrome('./chromedriver')
 DRIVER_PATH_BRAVE = '/usr/bin/chromedriver'
 DRIVER_PATH_DECENTR = '/home/jesiok/Downloads/chromedriver_linux64_100/chromedriver'
-DRIVER_PATH = DRIVER_PATH_BRAVE
+DRIVER_PATH = "D:\it\python\projects\Py_TrophyManager\chromedriver108.exe"
+#chromedriver108.exe
 
-# PROFILE PATH
-PROFILE_PATH_BRAVE = "--user-data-dir=/home/jesiok/.config/BraveSoftware/Brave-Browser/Profile 2"
-  #option.add_argument("--user-data-dir=/home/jesiok/.config/BraveSoftware/Brave-Browser/Profile 2"
-PROFILE_PATH_DECENTR = "--user-data-dir=/home/jesiok/.config/decentr/Profile 1"
-PROFILE_PATH = PROFILE_PATH_BRAVE 
+############ PROFILE PATH ############
+# windows profile Brave: "C:\Users\grzeg\AppData\Local\BraveSoftware\Brave-Browser\User Data\Profile 2"
+# windows profile Chrome: "C:\Users\grzeg\AppData\Local\Google\Chrome\User Data\Profile 2"
+# linux profile Brave:  "--user-data-dir=/home/jesiok/.config/BraveSoftware/Brave-Browser/Profile 2"
+# linux prifle Decentr "--user-data-dir=/home/jesiok/.config/decentr/Profile 1"
 
-# ENVIROMWNT
+PROFILE_PATH = "C:\Users\grzeg\AppData\Local\BraveSoftware\Brave-Browser\User Data\Profile 2" 
+
+############ ENVIROMWNT
 ENV = "PRD"
+
+#########################################################
 
 #########################################################
 

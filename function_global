@@ -1,0 +1,90 @@
+import pandas as pd
+from time import gmtime, strftime
+import random
+
+########################################################################
+## SESSION
+########################################################################    
+# rozbudowac,eby obiekt by uniwersalny. Moe z tego zrobic klase ?
+# mozna po pobraniu zrobic w petli, tyk by przy innych projektach nie definiowac scisc zmiennych w tym obiekcie
+def session_check_stop():
+    
+    session_STOP = False
+    # pobranie zmiennych sesyjnych
+    df_session = pd.read_excel("session.xlsx", sheet_name="session")
+    
+    # pobranie konkretnych zmiennych sesyjnych
+    session_STOP_ASAP = df_session["STOP_ASAP"].values[0]
+    
+    # ustawienie flagi na outpucie: session_STOP
+    if session_STOP_ASAP == True: session_STOP = True
+    
+    return session_STOP
+        
+########################################################################
+## utils - time
+######################################################################## 
+        
+def utils_random_percent(percent = ''):
+    # chyba jest jakas prostsza funkcja
+
+    losuj = random.randrange(1,100)
+    if losuj <= percent:
+        b_trafiony = True
+    else:
+        b_trafiony = False
+    return b_trafiony
+    
+######################################################################## 
+def utils_get_current_time():
+    # do poprawy
+    t_current_time = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+    return t_current_time
+    
+
+########################################################################
+## WEB
+######################################################################## 
+def web_clean_dirty_links(links_from_main_page, df_dict_keywords, df_dict_keywords_exceptions):
+# Usuniecie zepsutych linkow 
+    # pobranie slownika
+    
+    # Z pobranych linkow ze strony, usuniecie pustych + slowa kluczowe (https?)
+    df_links = pd.DataFrame(links_from_main_page)
+    df_links.columns = ['links']
+    df_links.dropna(subset='links',inplace=True)
+    
+    # tylko unikalne wartosci 
+    df_links = df_links['links'].unique()
+    df_links = pd.DataFrame(df_links)
+    df_links.columns = ['links']
+    
+    # zawiera slowa https
+    df_links = df_links[df_links['links'].str.contains('http')]
+    
+    # usuniecie linkow, ktore nie posiadaja slow kluczy ze slownika
+    if df_dict_keywords.shape[0] > 0: 
+        df_new = df_links[0:0]
+
+        for i in df_dict_keywords.index:
+            keyword = df_dict_keywords["KEYWORDS"][i]
+            print(keyword)
+            
+            df_temp = df_links[df_links['links'].str.contains(keyword)]
+            df_new = df_new.append(df_temp)
+            print(len(df_new))
+            
+        df_new.sort_values(by=['links'],inplace= True)
+
+        df_links = df_new
+    
+        
+        
+    # usniecie linkow, ktore zawieraja jakies slowa klucze   
+    df_dict_keywords_exceptions = df_dict_keywords_exceptions['KEYWORDS']
+    l_dict_keywords_exceptions = df_dict_keywords_exceptions.values.tolist()
+    df_links = df_links[~df_links['links'].isin(l_dict_keywords_exceptions)]
+        
+    links = df_links.values.tolist()    
+    
+    return links

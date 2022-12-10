@@ -74,6 +74,14 @@ class Browser():
         self.driver.implicitly_wait(30) # moe to czas da na inpucie. Bez tego potem nie bedzie wylapywac np linkow a href
         self.driver.get(url)
     
+    def check_xpath_exists(self, xpath):
+        # from selenium.common.exceptions import NoSuchElementException
+        try:
+            self.driver.find_element('xpath',xpath)
+        except NoSuchElementException:
+            return False
+        return True
+    
     def get_all_links_from_page(self):
         # ??? monzna zrobic cos bardziej uniwersalnego
 

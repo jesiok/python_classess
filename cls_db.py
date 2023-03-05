@@ -11,29 +11,42 @@ class DB_class():
 # db = DB_class(db='browser_ads.db')
     
 # TO DO, przy SQLu dodać param    
-    def __init__(self,db):
-        self.db = db
-        self.connection = sqlite3.connect(db)
+    def __init__(self,path_db):
+        self.db = path_db
+        self.connection = sqlite3.connect(path_db)
         self.cursor = self.connection.cursor() 
     # def __enter__(self):
     #     return self
 
 ## select
     def select_to_df_by_pandas(self,sql):
-        # Przykladowe zastosowanie:
-        # db = DB_class(db='DB_browser_adv.db')
-        # df = db.select_to_df("select * from tbl_browser_adv_summary")
+        """
+        input:
+            sql
+            np.df = db.select_to_df_by_pandas("select * from tbl_browser_adv_summary")
+        output:
+            df
+        
+        """
+
         df = pd.read_sql_query(sql, self.connection)
         return df
 
-    def select_to_df_by_fetchall(self,sql,args):
-        self.cursor.execute(sql,args)
+    def select_to_df_by_fetchall(self,sql):
+        self.cursor.execute(sql)
         c = self.cursor.fetchall()
         df = pd.DataFrame(c)
         return df
         # info fetchone - zwraca jedna linijka, jako tuple, fetchall zwraca liste
 
-    def select_by_fetchall(self,sql,args):
+    def select_by_fetchall(self,sql):
+        """
+        input:
+            sql
+        output:
+            list
+        """
+
         self.cursor.execute(sql)
         c = self.cursor.fetchall()
         return c
@@ -41,31 +54,64 @@ class DB_class():
 ## insert     
 
     def insert(self,sql):
+        """
+        input: sql
+        output: lastrow id
+
         # Przykladowe zastosowanie:
-        # db = DB_class(db='DB_browser_adv.db')
-        # db.insert("INSERT INTO tbl_browser_adv_summary (TASK, WEBSITE) VALUES ('test3','interia_test')")
-        # df = db.select_to_df_by_pandas("select * from tbl_browser_adv_summary")
+
+        db = DB_class(db='DB_browser_adv.db')
+        db.insert("INSERT INTO tbl_browser_adv_summary (TASK, WEBSITE) VALUES ('test3','interia_test')")
+        df = db.select_to_df_by_pandas("select * from tbl_browser_adv_summary")
+        
+        """
         self.cursor.execute(sql)
         id = self.cursor.lastrowid
         self.connection.commit()
         return id  
     
-    def insert_many(self,sql,args):
-        self.cursor.executemany(sql,args) 
+    def insert_many(self,sql):
+        self.cursor.executemany(sql) 
         rowcount = self.cursor.rowcount
         self.connection.commit()
         return rowcount   
 
+
+    
+    def insert_df(self, table_name , df, if_exists="replace", index=False):
+        """
+        input: 
+            table_name, 
+            df,
+            if_exists = "replace" "apend"
+            index = False
+
+        output:
+            --
+        """
+
+        df.to_sql(table_name, self.connection, if_exists=if_exists, index=False)
+        self.connection.commit()
+        self.connection.close()
+
+
 ## update    
-    def update(self,sql,args):
+    def update(self,sql):
         self.cursor.execute(sql)
         rowcount = self.cursor.rowcount
         self.connection.commit()
         return rowcount  
 
 ## delete        
-    def delete(self):
-        pass   
+    def delete(self,sql):
+        """
+        input:
+            sql np. "delete from tbl_name"
+        output:
+        """
+        self.cursor.execute(sql)
+        rowcount = self.cursor.rowcount
+        self.connection.commit()   
      
 ## drop    
     def drop(self):
